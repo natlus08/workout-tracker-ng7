@@ -1,0 +1,34 @@
+.view-record{
+  border: solid green;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+@keyframes blink { 
+   50% { border: solid grey; } 
+}
+.view-started-record{
+  border: solid red;
+  padding: 10px;
+  margin-bottom: 10px;
+  animation: blink .5s step-end infinite alternate;
+}
+.navbar-inner {
+  height: 40px;
+}
+
+.scrollable {
+  height: 100%;
+  overflow: auto;
+}
+
+.max-height {
+  height: 100%;
+}
+
+.no-overflow {
+  overflow: hidden;
+}
+
+.pad40-top {
+  padding-top: 40px;
+}

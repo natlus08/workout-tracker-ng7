@@ -1,0 +1,33 @@
+<app-navbar></app-navbar>
+<div class="row" xmlns="http://www.w3.org/1999/html">
+  <div class="col-12">
+    <div class="input-group input-group-sm mb-3">
+      <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  placeholder="Search..." [(ngModel)]="searchText">
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let workout of workouts | workoutfilter : searchText; index as i" 
+[ngClass]="workout.started ? 'view-started-record' : 'view-record'">
+  <div class="row">
+    <div class="col-12">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" [ngModel]="workout.title" readonly>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-3 mt-1">
+      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/edit',i]">Edit</button>
+    </div>
+    <div class="col-lg-3 mt-1">
+      <button class="btn btn-outline-dark btn-block" (click)="removeWorkout(i)" [disabled]="workout.started && workoutInProgress">Delete</button>
+    </div>
+    <div class="col-lg-3 mt-1">
+      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/start',i]" [disabled]="(!workout.started && workoutInProgress) || (workoutInProgress)">Start</button>
+    </div>
+    <div class="col-lg-3 mt-1">
+      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/end',i]" [disabled]="!workout.started">End</button>
+    </div>
+  </div>
+</div>

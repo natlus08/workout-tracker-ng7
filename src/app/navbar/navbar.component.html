@@ -1,0 +1,14 @@
+<div class="row navigator" id="navbar">
+    <div class="col-lg-3">
+      <a [routerLink] = "['/view']" [ngClass]="{'selected': activatedRoute?.snapshot?.routeConfig?.path === 'view'}">View All</a>
+    </div>
+    <div class="col-lg-3">
+      <a [routerLink] = "['/create']" [ngClass]="{'selected': activatedRoute?.snapshot?.routeConfig?.path === 'create'}">Create</a>
+    </div>
+    <div class="col-lg-3">
+      <a [routerLink] = "['/category']" [ngClass]="{'selected': activatedRoute?.snapshot?.routeConfig?.path === 'category'}">Category</a>
+    </div>
+    <div class="col-lg-3">
+      <a [routerLink] = "['/track']" [ngClass]="{'selected': activatedRoute?.snapshot?.routeConfig?.path === 'track'}">Track</a>
+    </div>
+</div>

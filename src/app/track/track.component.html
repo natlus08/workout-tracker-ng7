@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+<div *ngIf = "!dataAvailable; else other_content">
+  No Data Available!
+</div>
+<ng-template #other_content>
+  <div class="row justify-content-center">
+    <div class="col-5">
+      Workout time of the day
+    </div>
+    <div class="col-5">
+      <strong>{{todaysWO}}</strong> Minutes
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-5">
+      Workout time of the week
+    </div>
+    <div class="col-5">
+      <strong>{{weeksWO}}</strong> Minutes
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-5">
+      Workout time of the month
+    </div>
+    <div class="col-5">
+      <strong>{{monthsWO}}</strong> Minutes
+    </div>
+  </div>
+  <div class="chart-container">
+    <div [chart]="weekChart"></div>
+  </div>
+  <div class="chart-container">
+    <div [chart]="monthChart"></div>
+  </div>
+  <div class="chart-container">
+    <div [chart]="yearChart"></div>
+  </div>
+</ng-template>

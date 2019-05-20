@@ -1,0 +1,47 @@
+.container-fluid{
+  width: 50% !important;
+}
+body {
+  padding-top: 2rem;
+  padding-bottom: 80px;
+  height: 100%;
+}
+.starter-template{
+  text-align: center;
+}
+.head{
+  padding: 10px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+.grey{
+  background-color: lightgrey;
+}
+h3{
+  text-align: left;
+}
+.navigator > div > a{
+  font-size: 20px;
+}
+.navigator{
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
+input[type="date"]::-webkit-calendar-picker-indicator{
+  display: none;
+}
+input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+input[type="time"]::-webkit-calendar-picker-indicator{
+  display: none;
+}
+input[type="time"]::-webkit-inner-spin-button {
+  display: none;
+}
+input[type="number"]::-webkit-calendar-picker-indicator{
+  display: none;
+}
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}

@@ -1,0 +1,14 @@
+form{
+  padding: 10px;
+  margin-bottom: 10px;
+}
+a.btn{
+  color: white !important;
+}
+.form-group.required .col-form-label:after {
+  color: #d00;
+  content: "*";
+  position: absolute;
+  margin-left: 8px;
+  top:7px;
+}

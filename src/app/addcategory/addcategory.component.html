@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+<div class="row" xmlns="http://www.w3.org/1999/html">
+  <div class="col-12">
+    <h3>Add Category</h3>
+  </div>
+  <div class="col-12">
+    <div class="input-group input-group-sm mb-3">
+      <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  placeholder="Search..." [(ngModel)]="searchText">
+    </div>
+  </div>
+  <div class="col-12">
+    <form #addCategoryForm="ngForm">
+      <div class="input-group">
+        <input type="text" required name="newCategory" class="form-control" placeholder="Category to add" aria-label="Category to add" [(ngModel)]="newCategory">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="addCategory()" type="button" [disabled]="addCategoryForm.invalid">+</button>
+        </div>
+      </div>
+      <div *ngIf="newCategory.invalid && (newCategory.dirty || newCategory.touched)" class="alert alert-danger">
+        <div *ngIf="newCategory.errors.required">
+          Category is required!
+        </div>
+      </div>
+      <div *ngIf="categoryFound" class="alert alert-danger">
+          Category already exists!
+      </div>
+    </form>
+  </div>
+ <div class="col-12 categories" *ngFor="let category of categories | categoryfilter : searchText; index as i">
+    <div class="input-group" id="category_{{i}}">
+      <input type="text" class="form-control" readonly [ngModel]="category.title" name="title_{{i}}" id="title_{{i}}" value="{{category.title}}">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="editCategory(i)" id="edit_{{i}}">Edit</button>
+        <button class="btn btn-outline-secondary d-none" type="button" (click)="updateCategory(i)" id="update_{{i}}">Update</button>
+        <button class="btn btn-outline-secondary" type="button" (click)="removeCategory(i)" id="delete_{{i}}">Delete</button>
+      </div>
+    </div>
+   <div class="alert alert-danger d-none" id="msg_{{i}}">
+     Category already exists!
+   </div>
+  </div>
+</div>
