@@ -5,3 +5,6 @@ form{
 a.btn{
   color: white;
 }
+label {
+  text-align: left;
+}
