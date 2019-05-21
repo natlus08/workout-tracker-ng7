@@ -10,13 +10,27 @@
 <div *ngFor="let workout of workouts | workoutfilter : searchText; index as i" 
 [ngClass]="workout.started ? 'view-started-record' : 'view-record'">
   <div class="row">
-    <div class="col-12">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" [ngModel]="workout.title" readonly>
+    <div class="col-lg-6">
+      <div class="input-group mb-3">        
+        {{workout.title | uppercase}}
       </div>
     </div>
+    <div class="col-lg-6">      
+        <a [routerLink] = "['/edit',i]">
+          <i class="fa fa-edit fa-2x mx-3"></i>
+        </a>    
+        <a (click)="(workout.started && workoutInProgress) ? null : removeWorkout(i)">
+          <i class="fa fa-trash fa-2x mx-3" [ngClass]="{'inactive-icon': (workout.started && workoutInProgress)}"></i>
+        </a>            
+        <a (click)="((!workout.started && workoutInProgress) || (workoutInProgress)) ? null : start(i)">
+          <i class="fa fa-play fa-2x mx-3" [ngClass]="{'inactive-icon': ((!workout.started && workoutInProgress) || (workoutInProgress))}"></i>
+        </a>
+        <a (click)="!workout.started ? null : end(i)">
+          <i class="fa fa-stop fa-2x mx-3" [ngClass]="{'inactive-icon': (!workout.started)}"></i>
+        </a>             
+    </div>    
   </div>
-  <div class="row">
+  <!--<div class="row">
     <div class="col-lg-3 mt-1">
       <button class="btn btn-outline-dark btn-block" [routerLink] = "['/edit',i]">Edit</button>
     </div>
@@ -29,5 +43,5 @@
     <div class="col-lg-3 mt-1">
       <button class="btn btn-outline-dark btn-block" [routerLink] = "['/end',i]" [disabled]="!workout.started">End</button>
     </div>
-  </div>
+  </div>-->
 </div>

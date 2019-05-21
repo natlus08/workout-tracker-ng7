@@ -37,3 +37,15 @@
 .pad40-top {
   padding-top: 40px;
 }
+
+.fa-trash.inactive-icon, .fa-play.inactive-icon, .fa-stop.inactive-icon {
+  color: grey;
+}
+
+.fa-play {
+  color: green;
+}
+
+.fa-stop {
+  color: red;
+}

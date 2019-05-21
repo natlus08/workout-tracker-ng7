@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
-import { WorkoutService } from '../services/workout.service'
-
+import { WorkoutService } from '../services/workout.service';
 import { Workout } from '../model/workout';
 
 @Component({
@@ -17,7 +17,7 @@ export class ViewworkoutsComponent implements OnInit {
 
   private workoutInProgress:boolean = false;
 
-  constructor(private _workoutService: WorkoutService) { }
+  constructor(private _workoutService: WorkoutService,  private router: Router) { }
 
   ngOnInit() {
     setTimeout(()=>{
@@ -44,4 +44,11 @@ export class ViewworkoutsComponent implements OnInit {
     });
   }
 
+  start(id: number) {    
+    this.router.navigate(['/start/' + id]);
+  }  
+
+  end(id: number) {
+    this.router.navigate(['/end/' + id]);
+  }  
 }
