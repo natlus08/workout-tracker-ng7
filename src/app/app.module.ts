@@ -1,16 +1,3 @@
-/*import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-
-import { AppComponent } from './app.component';
-
-@NgModule({
-  imports:      [ BrowserModule, FormsModule ],
-  declarations: [ AppComponent ],
-  bootstrap:    [ AppComponent ]
-})
-export class AppModule { }*/
-
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -26,8 +13,8 @@ import { AddcategoryComponent } from './addcategory/addcategory.component';
 import { ViewworkoutsComponent } from './viewworkouts/viewworkouts.component';
 import { EndworkoutComponent } from './endworkout/endworkout.component';
 import { TrackComponent } from './track/track.component';
-import { mainrouting } from './router/main-routing';
 import { EditworkoutComponent } from './editworkout/editworkout.component';
+import { mainrouting } from './router/main-routing';
 //import services
 import { CategoryService } from './services/category.service';
 import { WorkoutService } from './services/workout.service';
@@ -48,7 +35,7 @@ import { WorkoutFilterPipe } from './pipes/workoutfilter.pipe';
     EndworkoutComponent,
     TrackComponent,
     CategoryFilterPipe,
-    WorkoutFilterPipe
+    WorkoutFilterPipe    
   ],
   imports: [
     BrowserModule,
