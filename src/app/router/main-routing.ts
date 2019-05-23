@@ -38,7 +38,7 @@ const mainRoutes: Routes = [
 ];
 
 const routeConfig = {
-  useHash: true,
+  //useHash: true,
   preloadingStrategy: NoPreloading
 };
 
