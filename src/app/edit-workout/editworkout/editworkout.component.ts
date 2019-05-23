@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { WorkoutService } from '../services/workout.service';
-import { CategoryService } from '../services/category.service';
+import { WorkoutService } from '../../services/workout.service';
+import { CategoryService } from '../../services/category.service';
 
-import { Workout } from '../model/workout';
-import { Category } from '../model/category';
+import { Workout } from '../../model/workout';
+import { Category } from '../../model/category';
 
 @Component({
   selector: 'app-editworkout',

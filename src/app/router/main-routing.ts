@@ -1,24 +1,50 @@
 import { NgModule } from '@angular/core';
 import { ModuleWithProviders }  from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NoPreloading, RouterModule, Routes } from '@angular/router';
 
 import { ViewworkoutsComponent } from '../viewworkouts/viewworkouts.component';
-import { AddworkoutComponent } from '../addworkout/addworkout.component';
-import { AddcategoryComponent } from '../addcategory/addcategory.component';
-import { EditworkoutComponent } from '../editworkout/editworkout.component';
-import { StartworkoutComponent } from '../startworkout/startworkout.component';
-import { EndworkoutComponent } from '../endworkout/endworkout.component';
-import { TrackComponent } from '../track/track.component';
 
-const mainRoutes: Routes = [
-  { path: 'view', component: ViewworkoutsComponent },
-  { path: 'edit/:index', component: EditworkoutComponent },
-  { path: 'start/:index', component: StartworkoutComponent },
-  { path: 'end/:index', component: EndworkoutComponent },
-  { path: 'create', component: AddworkoutComponent },
-  { path: 'category', component: AddcategoryComponent },
-  { path: 'track', component: TrackComponent },
-  { path: '**', redirectTo: 'view'}
+const mainRoutes: Routes = [  
+  { path: '', redirectTo: 'view', pathMatch: 'full'},
+  {
+    // since this is the default route, it must NOT be lazy loaded.
+    path: 'view',
+    component: ViewworkoutsComponent
+  },
+  {
+    path: 'edit/:index',
+    loadChildren: '../edit-workout/edit-workout.module#EditWorkoutModule'
+  },
+  {
+    path: 'start/:index',    
+    loadChildren: '../start-workout/start-workout.module#StartWorkoutModule'
+  },
+  {
+    path: 'end/:index',    
+    loadChildren: '../end-workout/end-workout.module#EndWorkoutModule'
+  },
+  {
+    path: 'create',    
+    loadChildren: '../add-workout/add-workout.module#AddWorkoutModule'
+  },
+  {
+    path: 'category',    
+    loadChildren: '../add-category/add-category.module#AddCategoryModule'
+  },
+  {
+    path: 'track',    
+    loadChildren: '../track-workouts/track-workouts.module#TrackWorkoutsModule'
+  }
 ];
 
-export const mainrouting: ModuleWithProviders = RouterModule.forRoot(mainRoutes);
+const routeConfig = {
+  useHash: true,
+  preloadingStrategy: NoPreloading
+};
+
+@NgModule({
+  imports: [RouterModule.forRoot(mainRoutes, routeConfig)],
+  exports: [RouterModule]
+})
+export class mainrouting {
+}

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 
-import { WorkoutService } from '../services/workout.service';
+import { WorkoutService } from '../../services/workout.service';
 
-import { Workout } from '../model/workout';
-import { Archive } from '../model/archive';
+import { Workout } from '../../model/workout';
+import { Archive } from '../../model/archive';
 
 @Component({
   selector: 'app-track',

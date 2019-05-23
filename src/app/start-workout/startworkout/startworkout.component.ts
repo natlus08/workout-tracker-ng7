@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { WorkoutService } from '../services/workout.service';
+import { WorkoutService } from '../../services/workout.service';
 
-import { Workout } from '../model/workout';
+import { Workout } from '../../model/workout';
 
 @Component({
   selector: 'app-startworkout',

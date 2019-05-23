@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ElementRef, Renderer2 } from '@angular/core';
 
-import { CategoryService } from '../services/category.service'
+import { CategoryService } from '../../services/category.service'
 
-import { Category } from '../model/category';
+import { Category } from '../../model/category';
 
 @Component({
   selector: 'app-addcategory',

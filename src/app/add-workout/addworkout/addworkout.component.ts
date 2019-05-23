@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
-import { CategoryService } from '../services/category.service';
-import { WorkoutService } from '../services/workout.service';
+import { CategoryService } from '../../services/category.service';
+import { WorkoutService } from '../../services/workout.service';
 
-import { Category } from '../model/category';
-import { Workout } from '../model/workout';
+import { Category } from '../../model/category';
+import { Workout } from '../../model/workout';
 
 @Component({
   selector: 'app-addworkout',

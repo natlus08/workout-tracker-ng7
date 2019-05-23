@@ -7,13 +7,7 @@ import { ChartModule } from 'angular-highcharts';
 //import components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { AddworkoutComponent } from './addworkout/addworkout.component';
-import { StartworkoutComponent } from './startworkout/startworkout.component';
-import { AddcategoryComponent } from './addcategory/addcategory.component';
 import { ViewworkoutsComponent } from './viewworkouts/viewworkouts.component';
-import { EndworkoutComponent } from './endworkout/endworkout.component';
-import { TrackComponent } from './track/track.component';
-import { EditworkoutComponent } from './editworkout/editworkout.component';
 import { mainrouting } from './router/main-routing';
 //import services
 import { CategoryService } from './services/category.service';
@@ -26,14 +20,8 @@ import { WorkoutFilterPipe } from './pipes/workoutfilter.pipe';
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    AddworkoutComponent,
-    StartworkoutComponent,
-    AddcategoryComponent,
-    EditworkoutComponent,
-    ViewworkoutsComponent,
-    EndworkoutComponent,
-    TrackComponent,
+    NavbarComponent,    
+    ViewworkoutsComponent,    
     CategoryFilterPipe,
     WorkoutFilterPipe    
   ],
