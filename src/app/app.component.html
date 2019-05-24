@@ -10,6 +10,7 @@
       </div>
 		</div>
 		<div class="grey col-lg-12">
+      <app-navbar [selectedView]="router?.url?.substring(1)" *ngIf="router?.url?.substring(1) === 'view' ||router?.url?.substring(1) === 'create' || router?.url?.substring(1) === 'category' || router?.url?.substring(1) === 'track'"></app-navbar>
 			<router-outlet></router-outlet>
 		</div>
 	</div>

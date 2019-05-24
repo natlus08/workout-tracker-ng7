@@ -13,16 +13,13 @@ import { mainrouting } from './router/main-routing';
 import { CategoryService } from './services/category.service';
 import { WorkoutService } from './services/workout.service';
 //import pipes
-import { CategoryFilterPipe } from './pipes/categoryfilter.pipe';
 import { WorkoutFilterPipe } from './pipes/workoutfilter.pipe';
-
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,    
-    ViewworkoutsComponent,    
-    CategoryFilterPipe,
+    ViewworkoutsComponent,        
     WorkoutFilterPipe    
   ],
   imports: [

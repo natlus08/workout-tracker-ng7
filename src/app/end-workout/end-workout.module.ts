@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 
+//import components
 import { EndworkoutComponent } from './endworkout/endworkout.component';
-import { NavbarComponent } from '../navbar/navbar.component';
 //import services
 import { WorkoutService } from '../services/workout.service';
 

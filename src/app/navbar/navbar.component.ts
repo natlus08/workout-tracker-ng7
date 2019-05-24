@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit, Input } from '@angular/core';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -8,8 +8,10 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  @Input() selectedView: string;
 
-  ngOnInit() { }
+  constructor() { }
 
+  ngOnInit() { } 
+  
 }

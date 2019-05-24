@@ -4,11 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 
+//import components
 import { AddcategoryComponent } from './addcategory/addcategory.component';
-import { NavbarComponent } from '../navbar/navbar.component';
 //import services
 import { CategoryService } from '../services/category.service';
-
+//import filters
+import { CategoryFilterPipe } from '../pipes/categoryfilter.pipe';
 
 const routes: Routes = [
   { path: '', component: AddcategoryComponent }
@@ -21,7 +22,7 @@ const routes: Routes = [
     NgbModule.forRoot(),
     FormsModule
   ],
-  declarations: [ AddcategoryComponent ],
+  declarations: [ AddcategoryComponent, CategoryFilterPipe ],
   providers: [CategoryService]
 })
 export class AddCategoryModule { }
