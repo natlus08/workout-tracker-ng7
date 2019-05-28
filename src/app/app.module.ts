@@ -4,6 +4,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AsyncLocalStorageModule } from 'angular-async-local-storage';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'angular-highcharts';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 //import components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -14,6 +16,8 @@ import { CategoryService } from './services/category.service';
 import { WorkoutService } from './services/workout.service';
 //import pipes
 import { WorkoutFilterPipe } from './pipes/workoutfilter.pipe';
+//import environments
+import { environment } from './environments/environment';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,9 @@ import { WorkoutFilterPipe } from './pipes/workoutfilter.pipe';
     AsyncLocalStorageModule,
     FormsModule,
     ReactiveFormsModule,
-    ChartModule
+    ChartModule,
+    AngularFireModule.initializeApp(environment.firebase),
+ 	  AngularFirestoreModule
   ],
   providers: [CategoryService, WorkoutService],
   bootstrap: [AppComponent]
