@@ -5,14 +5,10 @@
 </div>
 <br>
 <form #editWorkoutForm="ngForm" novalidate>
-  <div *ngIf="(workout.title.invalid && (workout.title.dirty || workout.title.touched) || (workout.calories.invalid && (workout.calories.dirty || workout.calories.touched))
-    || (workout.category.invalid && (workout.category.dirty || workout.category.touched)))" class="alert alert-danger row">
+  <div *ngIf="(workout.title.invalid && (workout.title.dirty || workout.title.touched) || (workout.category.invalid && (workout.category.dirty || workout.category.touched)))" class="alert alert-danger row">
     <div *ngIf="workout.title.errors.required">
       Title is required!
-    </div>
-    <div *ngIf="workout.calories.errors.required">
-      Calorie is required!
-    </div>
+    </div>   
     <div *ngIf="workout.category.errors.required">
       Category is required!
     </div>
@@ -36,8 +32,7 @@
     <label for="category" class="col-sm-4 col-form-label">Category</label>
     <div class=" input-group col-sm-8">
       <select class="form-control" id="category" name="category" [(ngModel)]="workout.category" required>
-        <option value="Select">Select</option>
-        <option *ngFor="let category of categories">{{category.title}}</option>
+        <option *ngFor="let category of categories" [ngValue]="category">{{category.name}}</option>
       </select>
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" (click)="openCategoryModal(content)">+</button>

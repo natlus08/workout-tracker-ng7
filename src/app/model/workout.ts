@@ -1,12 +1,10 @@
+import { Category } from './category';
+
 export class Workout {
-  public id: string;
+  constructor(id: number, title: string, note: string, caloriesBurnt: number, category: Category) { }
+  public id: number;
   public title: string;
   public note: string;
-  public calories: number;
-  public category: string;
-  public startdate: Date;
-  public enddate: Date;
-  public starttime: Date;
-  public endtime: Date;
-  public started: boolean;
+  public caloriesBurnt: number;
+  public category: Category;
 }

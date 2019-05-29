@@ -32,7 +32,7 @@ export class EditworkoutComponent implements OnInit {
   private categoryAdded:boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private _workoutService: WorkoutService, private _categoryService: CategoryService, private modalService: NgbModal) {
-    this.workout = new Workout('','',0,'',null,null,null,null,false);
+    this.workout = new Workout(null,'','',0,new Category(null,''));
   }
 
   ngOnInit() {
@@ -41,12 +41,20 @@ export class EditworkoutComponent implements OnInit {
     });
     this.getCategories();
     this.getWorkouts();
+    this.getWorkout();
   }
 
   getWorkouts() : void{
     this._workoutService.getWorkouts().subscribe((data) => {
         this.workouts = data;
-        this.workout = this.workouts[this.selectedId];
+      }
+    );
+  }
+
+  getWorkout() : void{
+    this._workoutService.getWorkout(this.selectedId).subscribe((data) => {
+        this.workout = data;
+        this.workout.category = this.categories[this.getIndex(this.workout.category.id)];
       }
     );
   }
@@ -60,14 +68,13 @@ export class EditworkoutComponent implements OnInit {
 
   update(): void{
     this.workouts.forEach((workout,index) => {
-      if(index != this.selectedId && (workout.title.toLowerCase() == this.workout.title.toLowerCase())){
+      if(workout.id != this.selectedId && (workout.title.toLowerCase() == this.workout.title.toLowerCase())){
         this.workoutFound = true;
         return;
       }
     });
     if(!this.workoutFound){
-      this.workouts[this.selectedId] = this.workout;
-      this._workoutService.addWorkout(this.workouts).subscribe(() => {
+      this._workoutService.editWorkout(this.workout).subscribe(() => {
         this.router.navigate(['/view']);
       });
     }
@@ -83,18 +90,29 @@ export class EditworkoutComponent implements OnInit {
     this.categoryFound = false;
     this.categoryAdded = false;
     this.categories.forEach(category => {
-      if(category.title.toLowerCase() == this.newCategory.toLowerCase()){
+      if(category.name.toLowerCase() == this.newCategory.toLowerCase()){
         this.categoryFound = true;
         return;
       }
     });
     if(!this.categoryFound){
-      this.categories.push(new Category(this.newCategory));
-      this._categoryService.addCategory(this.categories).subscribe(() => {
+      let newCategoryObj: Category = new Category(null,this.newCategory);
+      this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
         this.newCategory = '';
         this.categoryAdded = true;
+        this.categories.push(data);
       });
     }
+  }
+
+  getIndex(id: number) : number {
+    let pos:number = -1;
+    this.categories.forEach(function(category, index){
+      if(category.id === id){
+        pos = index;
+      }
+    });
+    return pos;
   }
 
 }

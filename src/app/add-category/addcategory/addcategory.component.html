@@ -27,15 +27,15 @@
   </div>
  <div class="col-12 categories" *ngFor="let category of categories | categoryfilter : searchText; index as i">
     <div class="input-group" id="category_{{i}}">
-      <input type="text" class="form-control" readonly [ngModel]="category.title" name="title_{{i}}" id="title_{{i}}" value="{{category.title}}">
+      <input type="text" class="form-control" readonly [ngModel]="category.name" name="title_{{category.id}}" id="title_{{category.id}}" value="{{category.name}}">
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" (click)="editCategory(i)" id="edit_{{i}}">Edit</button>
-        <button class="btn btn-outline-secondary d-none" type="button" (click)="updateCategory(i)" id="update_{{i}}">Update</button>
-        <button class="btn btn-outline-secondary" type="button" (click)="removeCategory(i)" id="delete_{{i}}">Delete</button>
+        <button class="btn btn-outline-secondary" type="button" (click)="editCategory(category.id)" id="edit_{{category.id}}">Edit</button>
+        <button class="btn btn-outline-secondary d-none" type="button" (click)="updateCategory(category.id)" id="update_{{category.id}}">Update</button>
+        <button class="btn btn-outline-secondary" type="button" (click)="removeCategory(category.id)" id="delete_{{category.id}}">Delete</button>
       </div>
     </div>
-   <div class="alert alert-danger d-none" id="msg_{{i}}">
+   <div class="alert alert-danger d-none" id="msg_{{category.id}}">
      Category already exists!
    </div>
-  </div>
+  </div>  
 </div>

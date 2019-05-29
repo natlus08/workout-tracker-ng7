@@ -3,8 +3,8 @@ import { Chart } from 'angular-highcharts';
 
 import { WorkoutService } from '../../services/workout.service';
 
+import { ActiveWorkout } from '../../model/activeworkout';
 import { Workout } from '../../model/workout';
-import { Archive } from '../../model/archive';
 
 @Component({
   selector: 'app-track',
@@ -13,7 +13,7 @@ import { Archive } from '../../model/archive';
 })
 export class TrackComponent implements OnInit {
 
-  private archives:Archive[] = [];
+  private activeWorkouts:ActiveWorkout[] = [];
 
   private dataAvailable:boolean = true;
 
@@ -61,6 +61,175 @@ export class TrackComponent implements OnInit {
   private oct: number = 0;
   private nov: number = 0;
   private dec: number = 0;
+
+
+  constructor(private _workoutService: WorkoutService) { }
+
+  ngOnInit() {
+    this.dataAvailable = true;
+    this.getArchives();
+  }
+
+  getArchives(): void{
+    this._workoutService.getActiveWorkouts().subscribe((data) => {
+        if(data != null){
+          this.activeWorkouts = data;
+          this.calculateWOMinutes();
+          this.chartData();
+        }else{
+          this.dataAvailable = false;
+        }
+      }
+    );
+  }
+
+  calculateWOMinutes(): void{
+    var day = this.today.getDay();
+    this.activeWorkouts.forEach(activeWorkout => {
+      let minStartDate = this.combineStartDateTime(activeWorkout);
+      let minEndDate = this.combineEndDateTime(activeWorkout);
+      this.days = Math.ceil((Math.abs(this.today.getTime() - minEndDate.getTime())) / (1000 * 3600 * 24));
+      this.minutes = Math.ceil((Math.abs(minEndDate.getTime() - minStartDate.getTime())) / (1000 * 60));
+      if(this.days == 1){
+        this.todaysWO = this.todaysWO + this.minutes;
+      }
+      if(this.days <= 7 && this.days <= day){
+        this.weeksWO = this.weeksWO + this.minutes;
+      }
+      if(this.days <= 31 && (this.today.getMonth() === minEndDate.getMonth())){
+        this.monthsWO = this.monthsWO + this.minutes;
+      }
+    });
+  }
+
+  chartData(): void {
+    var day = this.today.getDay();
+    this.activeWorkouts.forEach(activeWorkout => {
+      let startDate = this.combineStartDateTime(activeWorkout);
+      let endDate = this.combineEndDateTime(activeWorkout);
+      this.days = Math.ceil((Math.abs(this.today.getTime() - endDate.getTime())) / (1000 * 3600 * 24));
+      let calories = this.calorieCalculator(activeWorkout);
+      if(this.days <= 7 && this.days <= day){
+        if(endDate.getDay() === 0){
+          this.sun = this.sun + calories;
+        }else if(endDate.getDay() === 1){
+          this.mon = this.mon + calories;
+        }else if(endDate.getDay() === 2){
+          this.tue = this.tue + calories;
+        }else if(endDate.getDay() === 3){
+          this.wed = this.wed + calories;
+        }else if(endDate.getDay() === 4){
+          this.thu = this.thu + calories;
+        }else if(endDate.getDay() === 5){
+          this.fri = this.fri + calories;
+        }else if(endDate.getDay() === 6){
+          this.sat = this.sat + calories;
+        }
+      }
+      if(this.today.getFullYear() === endDate.getFullYear()) {
+        if (endDate.getMonth() === 0) {
+          this.jan = this.jan + calories;
+        } else if (endDate.getMonth() === 1) {
+          this.feb = this.feb + calories;
+        } else if (endDate.getMonth() === 2) {
+          this.mar = this.mar + calories;
+        } else if (endDate.getMonth() === 3) {
+          this.apr = this.apr + calories;
+        } else if (endDate.getMonth() === 4) {
+          this.may = this.may + calories;
+        } else if (endDate.getMonth() === 5) {
+          this.jun = this.jun + calories;
+        } else if (endDate.getMonth() === 6) {
+          this.jul = this.jul + calories;
+        } else if (endDate.getMonth() === 7) {
+          this.aug = this.aug + calories;
+        } else if (endDate.getMonth() === 8) {
+          this.sep = this.sep + calories;
+        } else if (endDate.getMonth() === 9) {
+          this.oct = this.oct + calories;
+        } else if (endDate.getMonth() === 10) {
+          this.nov = this.nov + calories;
+        } else if (endDate.getMonth() === 11) {
+          this.dec = this.dec + calories;
+        }
+        if((this.days <= 31) && (this.today.getMonth() === endDate.getMonth())) {
+          var dayone = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+          let week = Math.ceil((Math.abs((endDate.getTime() - dayone.getTime()) / 86400000) + dayone.getDay() + 1) / 7 );
+          if (week === 1){
+            this.w1 = this.w1 + calories;
+          }else if(week === 2){
+            this.w2 = this.w2 + calories;
+          }else if(week === 3){
+            this.w3 = this.w3 + calories;
+          }else if(week === 4){
+            this.w4 = this.w4 + calories;
+          }else if(week === 5){
+            this.w5 = this.w5 + calories;
+          }
+        }
+      }
+    });
+
+    this.weekChartData.push(this.sun);
+    this.weekChartData.push(this.mon);
+    this.weekChartData.push(this.tue);
+    this.weekChartData.push(this.wed);
+    this.weekChartData.push(this.thu);
+    this.weekChartData.push(this.fri);
+    this.weekChartData.push(this.sat);
+
+
+    this.yearChartData.push(this.jan);
+    this.yearChartData.push(this.feb);
+    this.yearChartData.push(this.mar);
+    this.yearChartData.push(this.apr);
+    this.yearChartData.push(this.may);
+    this.yearChartData.push(this.jun);
+    this.yearChartData.push(this.jul);
+    this.yearChartData.push(this.aug);
+    this.yearChartData.push(this.sep);
+    this.yearChartData.push(this.oct);
+    this.yearChartData.push(this.nov);
+    this.yearChartData.push(this.dec);
+
+    this.monthChartData.push(this.w1);
+    this.monthChartData.push(this.w2);
+    this.monthChartData.push(this.w3);
+    this.monthChartData.push(this.w4);
+    this.monthChartData.push(this.w5);
+
+    this.weekChart.addSeries({
+      name: 'workouts',
+      data: this.weekChartData,
+      color: 'orange'
+    }, true, true);
+    this.monthChart.addSeries({
+      name: 'workouts',
+      data: this.monthChartData,
+      color: 'purple'
+    }, true, true);
+    this.yearChart.addSeries({
+      name: 'workouts',
+      data: this.yearChartData,
+      color: 'green'
+    }, true, true);
+  }
+
+  calorieCalculator(activeWorkout: ActiveWorkout): number {
+    let calStartDate = this.combineStartDateTime(activeWorkout);
+    let calEndDate = this.combineEndDateTime(activeWorkout);
+    return Math.ceil((Math.abs((calEndDate.getTime() - calStartDate.getTime()) / (1000*60))))*activeWorkout.workout.caloriesBurnt;
+  }
+
+  combineStartDateTime(activeWorkout: ActiveWorkout) : Date {
+    return new Date(+activeWorkout.startDate.toString().substring(0, 4), +activeWorkout.startDate.toString().substring(5, 7) - 1, +activeWorkout.startDate.toString().substring(8, 10),
+      +activeWorkout.startTime.toString().substring(0, 2), +activeWorkout.startTime.toString().substring(3, 5), +activeWorkout.startTime.toString().substring(6, 8));
+  }
+
+  combineEndDateTime(activeWorkout: ActiveWorkout) : Date {
+    return new Date(+activeWorkout.endDate.toString().substring(0, 4), +activeWorkout.endDate.toString().substring(5, 7) - 1, +activeWorkout.endDate.toString().substring(8, 10),
+      +activeWorkout.endTime.toString().substring(0, 2), +activeWorkout.endTime.toString().substring(3, 5), +activeWorkout.endTime.toString().substring(6, 8));
+  }
 
   private weekChart = new Chart({
     chart: {
@@ -211,149 +380,4 @@ export class TrackComponent implements OnInit {
       enabled: false
     }
   });
-
-
-  constructor(private _workoutService: WorkoutService) { }
-
-  ngOnInit() {
-    this.dataAvailable = true;
-    this.getArchives();
-  }
-
-  getArchives(): void{
-    this._workoutService.getArchives().subscribe((data) => {
-        if(data != null){
-          this.archives = data;
-          this.calculateWOMinutes();
-          this.chartData();
-        }else{
-          this.dataAvailable = false;
-        }
-      }
-    );
-  }
-
-  calculateWOMinutes(): void{
-    var day = this.today.getDay();
-    this.archives.forEach(archive => {
-      this.days = Math.ceil((Math.abs(this.today.getTime() - archive.enddate.getTime())) / (1000 * 3600 * 24));
-      this.minutes = Math.ceil((Math.abs(archive.enddate.getTime() - archive.startdate.getTime())) / (1000 * 60));
-      if(this.days == 1){
-        this.todaysWO = this.todaysWO + this.minutes;
-      }
-      if(this.days <= 7 && this.days <= day){
-        this.weeksWO = this.weeksWO + this.minutes;
-      }
-      if(this.days <= 31 && (this.today.getMonth() === archive.enddate.getMonth())){
-        this.monthsWO = this.monthsWO + this.minutes;
-      }
-    });
-  }
-
-  chartData(): void {
-    var day = this.today.getDay();
-    this.archives.forEach(archive => {
-      this.days = Math.ceil((Math.abs(this.today.getTime() - archive.enddate.getTime())) / (1000 * 3600 * 24));
-      if(this.days <= 7 && this.days <= day){
-        if(this.days === 0){
-          this.sun = this.sun + archive.calories;
-        }else if(this.days === 1){
-          this.mon = this.mon + archive.calories;
-        }else if(this.days === 2){
-          this.tue = this.tue + archive.calories;
-        }else if(this.days === 3){
-          this.wed = this.wed + archive.calories;
-        }else if(this.days === 4){
-          this.thu = this.thu + archive.calories;
-        }else if(this.days === 5){
-          this.fri = this.fri + archive.calories;
-        }else if(this.days === 6){
-          this.sat = this.sat + archive.calories;
-        }
-      }
-      if(this.today.getFullYear() === archive.enddate.getFullYear()) {
-        if (archive.enddate.getMonth() === 0) {
-          this.jan = this.jan + archive.calories;
-        } else if (archive.enddate.getMonth() === 1) {
-          this.feb = this.feb + archive.calories;
-        } else if (archive.enddate.getMonth() === 2) {
-          this.mar = this.mar + archive.calories;
-        } else if (archive.enddate.getMonth() === 3) {
-          this.apr = this.apr + archive.calories;
-        } else if (archive.enddate.getMonth() === 4) {
-          this.may = this.may + archive.calories;
-        } else if (archive.enddate.getMonth() === 5) {
-          this.jun = this.jun + archive.calories;
-        } else if (archive.enddate.getMonth() === 6) {
-          this.jul = this.jul + archive.calories;
-        } else if (archive.enddate.getMonth() === 7) {
-          this.aug = this.aug + archive.calories;
-        } else if (archive.enddate.getMonth() === 8) {
-          this.sep = this.sep + archive.calories;
-        } else if (archive.enddate.getMonth() === 9) {
-          this.oct = this.oct + archive.calories;
-        } else if (archive.enddate.getMonth() === 10) {
-          this.nov = this.nov + archive.calories;
-        } else if (archive.enddate.getMonth() === 11) {
-          this.dec = this.dec + archive.calories;
-        }
-        if((this.days <= 31) && (this.today.getMonth() === archive.enddate.getMonth())) {
-          var dayone = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
-          let week = Math.ceil((Math.abs((archive.enddate.getTime() - dayone.getTime()) / 86400000) + dayone.getDay() + 1) / 7 );
-          if (week === 1){
-            this.w1 = this.w1 + archive.calories;
-          }else if(week === 2){
-            this.w2 = this.w2 + archive.calories;
-          }else if(week === 3){
-            this.w3 = this.w3 + archive.calories;
-          }else if(week === 4){
-            this.w4 = this.w4 + archive.calories;
-          }else if(week === 5){
-            this.w5 = this.w5 + archive.calories;
-          }
-        }
-      }
-    });
-
-    this.weekChartData.push(this.sun);
-    this.weekChartData.push(this.mon);
-    this.weekChartData.push(this.tue);
-    this.weekChartData.push(this.wed);
-    this.weekChartData.push(this.thu);
-    this.weekChartData.push(this.fri);
-    this.weekChartData.push(this.sat);
-
-
-    this.yearChartData.push(this.jan);
-    this.yearChartData.push(this.feb);
-    this.yearChartData.push(this.mar);
-    this.yearChartData.push(this.apr);
-    this.yearChartData.push(this.may);
-    this.yearChartData.push(this.jun);
-    this.yearChartData.push(this.jul);
-    this.yearChartData.push(this.aug);
-    this.yearChartData.push(this.sep);
-    this.yearChartData.push(this.oct);
-    this.yearChartData.push(this.nov);
-    this.yearChartData.push(this.dec);
-
-    this.monthChartData.push(this.w1);
-    this.monthChartData.push(this.w2);
-    this.monthChartData.push(this.w3);
-    this.monthChartData.push(this.w4);
-    this.monthChartData.push(this.w5);
-
-    this.weekChart.addSeries({
-      name: 'workouts',
-      data: this.weekChartData
-    }, true, true);
-    this.monthChart.addSeries({
-      name: 'workouts',
-      data: this.monthChartData
-    }, true, true);
-    this.yearChart.addSeries({
-      name: 'workouts',
-      data: this.yearChartData
-    },true, true);
-  }  
 }

@@ -15,32 +15,18 @@
       </div>
     </div>
     <div class="col-lg-6">      
-        <a [routerLink] = "['/edit',i]">
+        <a [routerLink] = "['/edit',workout.id]">
           <i class="fa fa-edit fa-2x mx-3"></i>
         </a>    
-        <a (click)="(workout.started && workoutInProgress) ? null : removeWorkout(i)">
-          <i class="fa fa-trash fa-2x mx-3" [ngClass]="{'inactive-icon': (workout.started && workoutInProgress)}"></i>
+        <a (click)="(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress" ? null : removeWorkout(workout.id)">
+          <i class="fa fa-trash fa-2x mx-3" [ngClass]="{'inactive-icon': (activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress"}"></i>
         </a>            
-        <a (click)="((!workout.started && workoutInProgress) || (workoutInProgress)) ? null : start(i)">
-          <i class="fa fa-play fa-2x mx-3" [ngClass]="{'inactive-icon': ((!workout.started && workoutInProgress) || (workoutInProgress))}"></i>
+        <a (click)="((!(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress) || (workoutInProgress)) ? null : start(workout.id)">
+          <i class="fa fa-play fa-2x mx-3" [ngClass]="{'inactive-icon': ((!(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress) || (workoutInProgress))}"></i>
         </a>
-        <a (click)="!workout.started ? null : end(i)">
-          <i class="fa fa-stop fa-2x mx-3" [ngClass]="{'inactive-icon': (!workout.started)}"></i>
+        <a (click)="!(activeWorkoutId > 0 && activeWorkoutId === workout.id) ? null : end(workout.id)">
+          <i class="fa fa-stop fa-2x mx-3" [ngClass]="{'inactive-icon': !(activeWorkoutId > 0 && activeWorkoutId === workout.id)}"></i>
         </a>             
     </div>    
-  </div>
-  <!--<div class="row">
-    <div class="col-lg-3 mt-1">
-      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/edit',i]">Edit</button>
-    </div>
-    <div class="col-lg-3 mt-1">
-      <button class="btn btn-outline-dark btn-block" (click)="removeWorkout(i)" [disabled]="workout.started && workoutInProgress">Delete</button>
-    </div>
-    <div class="col-lg-3 mt-1">
-      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/start',i]" [disabled]="(!workout.started && workoutInProgress) || (workoutInProgress)">Start</button>
-    </div>
-    <div class="col-lg-3 mt-1">
-      <button class="btn btn-outline-dark btn-block" [routerLink] = "['/end',i]" [disabled]="!workout.started">End</button>
-    </div>
-  </div>-->
+  </div>  
 </div>

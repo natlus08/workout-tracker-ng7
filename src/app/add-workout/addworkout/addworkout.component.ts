@@ -30,7 +30,7 @@ export class AddworkoutComponent implements OnInit {
   private categoryAdded:boolean = false;
 
   constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) {
-    this.workout = new Workout('','',0,'',null,null,null,null,false);
+    this.workout = new Workout(null,'','',0,new Category(null,''));
   }
 
   ngOnInit() {
@@ -40,14 +40,20 @@ export class AddworkoutComponent implements OnInit {
 
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
-        this.categories = data;
+        if( data != null){
+          this.categories = data;
+          //default the catgeory to the first element
+          this.workout.category = this.categories[0];
+        }
       }
     );
   }
 
   getWorkouts() : void{
     this._workoutService.getWorkouts().subscribe((data) => {
-        this.workouts = data;
+        if (data != null) {
+          this.workouts = data;
+        }
       }
     );
   }
@@ -61,19 +67,18 @@ export class AddworkoutComponent implements OnInit {
       }
     });
     if(!this.workoutFound){
-      this.workouts.push(this.workout);
-      this._workoutService.addWorkout(this.workouts).subscribe(() => {
+      this._workoutService.addWorkout(this.workout).subscribe(() => {
         this.router.navigate(['/view']);
       });
     }
   }
 
   increment() : void{
-    this.workout.calories = this.workout.calories + 0.1;
+    this.workout.caloriesBurnt = this.workout.caloriesBurnt + 0.1;
   }
 
   decrement() : void{
-    this.workout.calories = (this.workout.calories > 0.1) ? (this.workout.calories - 0.1) : this.workout.calories;
+    this.workout.caloriesBurnt = (this.workout.caloriesBurnt > 0.1) ? (this.workout.caloriesBurnt - 0.1) : this.workout.caloriesBurnt;
   }
 
   openCategoryModal(content): void{
@@ -86,18 +91,18 @@ export class AddworkoutComponent implements OnInit {
     this.categoryFound = false;
     this.categoryAdded = false;
     this.categories.forEach(category => {
-      if(category.title.toLowerCase() == this.newCategory.toLowerCase()){
+      if(category.name.toLowerCase() == this.newCategory.toLowerCase()){
         this.categoryFound = true;
         return;
       }
     });
     if(!this.categoryFound){
-      this.categories.push(new Category(this.newCategory));
-      this._categoryService.addCategory(this.categories).subscribe(() => {
+      let newCategoryObj: Category = new Category(null,this.newCategory);
+      this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
         this.newCategory = '';
+        this.categories.push(data);
         this.categoryAdded = true;
       });
     }
   }
-
 }
