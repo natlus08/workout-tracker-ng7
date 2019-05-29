@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'angular-highcharts';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { HttpClientModule } from '@angular/common/http';
 //import components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -35,7 +36,8 @@ import { environment } from './environments/environment';
     ReactiveFormsModule,
     ChartModule,
     AngularFireModule.initializeApp(environment.firebase),
- 	  AngularFirestoreModule
+ 	  AngularFirestoreModule,
+    HttpClientModule
   ],
   providers: [CategoryService, WorkoutService],
   bootstrap: [AppComponent]

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { WorkoutService } from './../services/workout.service'
 
@@ -28,19 +29,29 @@ export class ViewworkoutsComponent implements OnInit {
   getWorkouts() : void{
     this._workoutService.getWorkouts().subscribe((data) => {
         this.workouts = data;
-    });
+    }),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the workouts');
+    };
+
     this._workoutService.getActiveWorkout().subscribe((data) => {
       if(null != data){
         this.workoutInProgress = true;
         this.activeWorkoutId = data.workout.id;
       }
-    });
+    }),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the active workouts');
+    };
   }
 
   removeWorkout(id:number): void {
     this._workoutService.deleteWorkout(id).subscribe(() => {
       this.workouts.splice(this.getIndex(id), 1);
-    });
+    }),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the delete the workout');
+    };
   }
 
   getIndex(id: number) : number {

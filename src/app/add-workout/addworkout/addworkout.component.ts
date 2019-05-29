@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { CategoryService } from '../../services/category.service';
 import { WorkoutService } from '../../services/workout.service';
@@ -46,7 +47,10 @@ export class AddworkoutComponent implements OnInit {
           this.workout.category = this.categories[0];
         }
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the categories');
+    };
   }
 
   getWorkouts() : void{
@@ -55,7 +59,10 @@ export class AddworkoutComponent implements OnInit {
           this.workouts = data;
         }
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the workouts');
+    };
   }
 
   addworkout() : void{
@@ -69,7 +76,10 @@ export class AddworkoutComponent implements OnInit {
     if(!this.workoutFound){
       this._workoutService.addWorkout(this.workout).subscribe(() => {
         this.router.navigate(['/view']);
-      });
+      }),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to create the workout');
+    };
     }
   }
 

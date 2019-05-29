@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { WorkoutService } from '../../services/workout.service';
 
@@ -51,7 +52,10 @@ export class EndworkoutComponent implements OnInit {
         this.activeWorkout.endDate = this.today;
         this.activeWorkout.endTime = this.today;
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the active workout');
+    };
   }
 
   end() : void {
@@ -65,7 +69,10 @@ export class EndworkoutComponent implements OnInit {
       this.activeWorkout.status = false;
       this._workoutService.endWorkout(this.activeWorkout).subscribe(() => {
         this.router.navigate(['/view']);
-      })
+      }),
+      (err: HttpErrorResponse) => {        
+        console.log('Failed to end the workout');
+      };
     }
   }
 

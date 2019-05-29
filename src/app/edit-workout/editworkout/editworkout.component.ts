@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { WorkoutService } from '../../services/workout.service';
 import { CategoryService } from '../../services/category.service';
@@ -48,7 +49,10 @@ export class EditworkoutComponent implements OnInit {
     this._workoutService.getWorkouts().subscribe((data) => {
         this.workouts = data;
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the workouts');
+    };
   }
 
   getWorkout() : void{
@@ -56,14 +60,20 @@ export class EditworkoutComponent implements OnInit {
         this.workout = data;
         this.workout.category = this.categories[this.getIndex(this.workout.category.id)];
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the workout');
+    };
   }
 
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
         this.categories = data;
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the categories');
+    };
   }
 
   update(): void{
@@ -76,7 +86,10 @@ export class EditworkoutComponent implements OnInit {
     if(!this.workoutFound){
       this._workoutService.editWorkout(this.workout).subscribe(() => {
         this.router.navigate(['/view']);
-      });
+      }),
+      (err: HttpErrorResponse) => {        
+        console.log('Failed to update the workout');
+      };
     }
   }
 
@@ -101,7 +114,10 @@ export class EditworkoutComponent implements OnInit {
         this.newCategory = '';
         this.categoryAdded = true;
         this.categories.push(data);
-      });
+      }),
+      (err: HttpErrorResponse) => {        
+        console.log('Failed to add the category');
+      };
     }
   }
 

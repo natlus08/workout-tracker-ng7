@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { WorkoutService } from '../../services/workout.service';
 
@@ -52,7 +53,10 @@ export class StartworkoutComponent implements OnInit {
         this.activeWorkout.startDate = this.today;
         this.activeWorkout.startTime = this.today;
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the workout');
+    };;
   }
 
   start() : void {
@@ -63,7 +67,10 @@ export class StartworkoutComponent implements OnInit {
       this.activeWorkout.status = true;
       this._workoutService.startWorkout(this.activeWorkout).subscribe(() => {
         this.router.navigate(['/view']);
-      });
+      }),
+      (err: HttpErrorResponse) => {        
+        console.log('Failed to start the workout');
+      };
     }
   }
 

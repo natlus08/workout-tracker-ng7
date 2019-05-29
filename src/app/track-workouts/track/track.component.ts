@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { WorkoutService } from '../../services/workout.service';
 
@@ -80,7 +81,10 @@ export class TrackComponent implements OnInit {
           this.dataAvailable = false;
         }
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the active workouts');
+    };;
   }
 
   calculateWOMinutes(): void{

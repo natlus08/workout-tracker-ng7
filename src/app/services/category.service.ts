@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AsyncLocalStorage } from 'angular-async-local-storage';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 

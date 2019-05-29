@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElementRef, Renderer2 } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { CategoryService } from '../../services/category.service'
 
@@ -37,7 +38,10 @@ export class AddcategoryComponent implements OnInit {
           this.categories = data;
         }
       }
-    );
+    ),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to get the categories');
+    };
   }
 
   addCategory() : void{
@@ -53,7 +57,10 @@ export class AddcategoryComponent implements OnInit {
       this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
         this.newCategory = '';
         this.categories.push(data);
-      });
+      }),
+      (err: HttpErrorResponse) => {        
+        console.log('Failed to add the category');
+      };
     }
   }
 
@@ -81,7 +88,10 @@ export class AddcategoryComponent implements OnInit {
         this.newCategory = '';
         this.categories.splice(this.getIndex(id),1);
         this.categories.push(data);
-      });
+      }),
+      (err: HttpErrorResponse) => {        
+        console.log('Failed to get the update the category');
+      };
     }
   }
 
@@ -90,7 +100,10 @@ export class AddcategoryComponent implements OnInit {
     this._categoryService.deleteCategory(currentCategory.id).subscribe(() => {
       this.newCategory = '';
       this.categories.splice(this.getIndex(id),1);
-    });
+    }),
+    (err: HttpErrorResponse) => {        
+      console.log('Failed to delete the category');
+    };
   }
 
   getIndex(id: number) : number {
