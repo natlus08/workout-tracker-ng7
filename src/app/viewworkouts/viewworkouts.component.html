@@ -18,7 +18,7 @@
         <a [routerLink] = "['/edit',workout.id]">
           <i class="fa fa-edit fa-2x mx-3"></i>
         </a>    
-        <a (click)="(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress" ? null : removeWorkout(workout.id)">
+        <a (click)="(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress ? null : removeWorkout(workout.id)">
           <i class="fa fa-trash fa-2x mx-3" [ngClass]="{'inactive-icon': (activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress}"></i>
         </a>            
         <a (click)="(!(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress) || (workoutInProgress) ? null : start(workout.id)">
@@ -26,7 +26,7 @@
         </a>
         <a (click)="!(activeWorkoutId > 0 && activeWorkoutId === workout.id) ? null : end(workout.id)">
           <i class="fa fa-stop fa-2x mx-3" [ngClass]="{'inactive-icon': !(activeWorkoutId > 0 && activeWorkoutId === workout.id)}"></i>
-        </a>             
+        </a>
     </div>    
   </div>  
 </div>
