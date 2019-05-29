@@ -37,7 +37,7 @@ import { environment } from './environments/environment';
     ChartModule,
     AngularFireModule.initializeApp(environment.firebase),
  	  AngularFirestoreModule,
-    HttpClientModule
+    HttpClientModule    
   ],
   providers: [CategoryService, WorkoutService],
   bootstrap: [AppComponent]
