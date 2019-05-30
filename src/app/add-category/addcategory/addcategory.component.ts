@@ -96,13 +96,12 @@ export class AddcategoryComponent implements OnInit {
 
   removeCategory(id:number) : void{
     let currentCategory: Category = this.getCategoryFromArray(id);
-    this._categoryService.deleteCategory(currentCategory.id).subscribe(() => {
+    this._categoryService.deleteCategory(currentCategory.id).then(() => {
       this.newCategory = '';
-      this.categories.splice(this.getIndex(id),1);
-    }),
-    (err: HttpErrorResponse) => {        
+      //this.categories.splice(this.getIndex(id),1);
+    }).catch((err: HttpErrorResponse) => {        
       console.log('Failed to delete the category');
-    };
+    });
   }
 
   getIndex(id: number) : number {

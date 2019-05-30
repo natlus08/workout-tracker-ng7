@@ -24,8 +24,10 @@ export class CategoryService {
     );   
   }
 
-  addCategory(category:Category): Promise<DocumentReference>{    
-    return this.fireStore.collection<Category>('categories').add({...category}); // ... is a spread operator
+  addCategory(category:Category): Promise<DocumentReference>{ 
+    const { id, ...categoryToPersist } = category;
+    console.log(categoryToPersist);   
+    return this.fireStore.collection<Category>('categories').add({...categoryToPersist}); // ... is a spread operator
   }
 
   editCategory(category:Category):Observable<Category>{
@@ -33,8 +35,9 @@ export class CategoryService {
     return this.http.put<Category>(Constants.API_ENDPOINT+'category', category, Constants.HTTP_OPTIONS);
   }
 
-  deleteCategory(id:number):Observable<any>{
-    return this.http.delete(Constants.API_ENDPOINT+'category/'+id, Constants.HTTP_OPTIONS);
+  deleteCategory(id:string): Promise<void>{
+    //return this.http.delete(Constants.API_ENDPOINT+'category/'+id, Constants.HTTP_OPTIONS);
+    return this.fireStore.collection('categories').doc(id).delete();
   }
 
 }
