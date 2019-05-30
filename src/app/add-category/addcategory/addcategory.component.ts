@@ -63,13 +63,13 @@ export class AddcategoryComponent implements OnInit {
     }
   }
 
-  editCategory(id:number) : void {
+  editCategory(id: string) : void {
     this.renderer.addClass(this.element.nativeElement.querySelector('#edit_'+id),'d-none');
     this.renderer.removeClass(this.element.nativeElement.querySelector('#update_'+id),'d-none');
     this.renderer.removeAttribute(this.element.nativeElement.querySelector('#title_'+id),'readonly');
   }
 
-  updateCategory(id:number) : void {
+  updateCategory(id: string) : void {
     this.editCategoryFound = false;
     this.editCategoryTitle = this.element.nativeElement.querySelector('#title_'+id).value;
     this.renderer.addClass(this.element.nativeElement.querySelector('#msg_'+id),'d-none');
@@ -94,17 +94,16 @@ export class AddcategoryComponent implements OnInit {
     }
   }
 
-  removeCategory(id:number) : void{
+  removeCategory(id: string) : void{
     let currentCategory: Category = this.getCategoryFromArray(id);
     this._categoryService.deleteCategory(currentCategory.id).then(() => {
-      this.newCategory = '';
-      //this.categories.splice(this.getIndex(id),1);
+      this.newCategory = '';      
     }).catch((err: HttpErrorResponse) => {        
       console.log('Failed to delete the category');
     });
   }
 
-  getIndex(id: number) : number {
+  getIndex(id: string) : number {
     let pos:number = -1;
     this.categories.forEach(function(category, index){
       if(category.id === id){
@@ -114,7 +113,7 @@ export class AddcategoryComponent implements OnInit {
     return pos;
   }
 
-  getCategoryFromArray(id: number) : Category{
+  getCategoryFromArray(id: string) : Category{
     let categoryFromId: Category = null;
     this.categories.forEach(category => {
       if(category.id === id){

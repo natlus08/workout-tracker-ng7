@@ -17,16 +17,15 @@ export class CategoryService {
     let categoriesCollection: AngularFirestoreCollection<Category> = this.fireStore.collection<Category>('categories');
     return categoriesCollection.snapshotChanges().pipe(
       map(actions => actions.map(item => {
-        const data = item.payload.doc.data() as Category;
-        const id = item.payload.doc.id;        
-        return { id, ...data }; // .. refers destructuring       
+        let data = item.payload.doc.data() as Category;
+        data.id = item.payload.doc.id;        
+        return data;      
       }))
     );   
   }
 
   addCategory(category:Category): Promise<DocumentReference>{ 
-    const { id, ...categoryToPersist } = category;
-    console.log(categoryToPersist);   
+    const { id, ...categoryToPersist } = category;      
     return this.fireStore.collection<Category>('categories').add({...categoryToPersist}); // ... is a spread operator
   }
 
