@@ -35,7 +35,7 @@ export class AddcategoryComponent implements OnInit {
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
         if(data != null){
-          this.categories = data;
+          this.categories = data;          
         }
       }
     ),
@@ -53,14 +53,13 @@ export class AddcategoryComponent implements OnInit {
       }
     });
     if(!this.categoryFound){
-      let newCategoryObj: Category = new Category(null,this.newCategory);
-      this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
+      let newCategoryObj: Category = new Category(this.newCategory);                 
+      this._categoryService.addCategory(newCategoryObj).then(res => {
+        newCategoryObj.id = res.id;        
         this.newCategory = '';
-        this.categories.push(data);
-      }),
-      (err: HttpErrorResponse) => {        
+      }).catch(err => {        
         console.log('Failed to add the category');
-      };
+      });
     }
   }
 

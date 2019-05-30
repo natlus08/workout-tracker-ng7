@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
 
 import { Category } from '../model/category';
 
@@ -12,14 +13,19 @@ export class CategoryService {
 
   constructor(private http:HttpClient, private fireStore: AngularFirestore) { }
 
-  getCategories():Observable<any[]>{
-    //return this.http.get<Category[]>(Constants.API_ENDPOINT+'categories', Constants.HTTP_OPTIONS);
-    return this.fireStore.collection('categories').snapshotChanges();
+  getCategories():Observable<Category[]>{
+    let categoriesCollection: AngularFirestoreCollection<Category> = this.fireStore.collection<Category>('categories');
+    return categoriesCollection.snapshotChanges().pipe(
+      map(actions => actions.map(item => {
+        const data = item.payload.doc.data() as Category;
+        const id = item.payload.doc.id;        
+        return { id, ...data }; // .. refers destructuring       
+      }))
+    );   
   }
 
-  addCategory(category:Category):Observable<Category>{
-    let body = JSON.stringify(category);
-    return this.http.post<Category>(Constants.API_ENDPOINT+'category', category, Constants.HTTP_OPTIONS);
+  addCategory(category:Category): Promise<DocumentReference>{    
+    return this.fireStore.collection<Category>('categories').add({...category}); // ... is a spread operator
   }
 
   editCategory(category:Category):Observable<Category>{
