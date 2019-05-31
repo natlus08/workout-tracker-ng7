@@ -83,14 +83,11 @@ export class AddcategoryComponent implements OnInit {
     if(!this.editCategoryFound){
       let currentCategory: Category = this.getCategoryFromArray(id);
       currentCategory.name = this.editCategoryTitle;
-      this._categoryService.editCategory(currentCategory).subscribe((data) => {
-        this.newCategory = '';
-        this.categories.splice(this.getIndex(id),1);
-        this.categories.push(data);
-      }),
-      (err: HttpErrorResponse) => {        
-        console.log('Failed to get the update the category');
-      };
+      this._categoryService.editCategory(currentCategory).then(() => {
+        this.newCategory = '';      
+      }).catch((err: HttpErrorResponse) => {        
+          console.log('Failed to get the update the category');
+      });
     }
   }
 

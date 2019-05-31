@@ -25,17 +25,17 @@ export class CategoryService {
   }
 
   addCategory(category:Category): Promise<DocumentReference>{ 
-    const { id, ...categoryToPersist } = category;      
-    return this.fireStore.collection<Category>('categories').add({...categoryToPersist}); // ... is a spread operator
+    const { id, ...categoryToPersist } = category; // strip id from the cateogry model     
+    return this.fireStore.collection('categories').add({...categoryToPersist}); // ... is a spread operator
   }
 
-  editCategory(category:Category):Observable<Category>{
-    let body = JSON.stringify(category);
-    return this.http.put<Category>(Constants.API_ENDPOINT+'category', category, Constants.HTTP_OPTIONS);
+  editCategory(category:Category): Promise<void>{
+    const docId = category.id;
+    const { id, ...categoryToPersist } = category; // strip id from the cateogry model  
+    return this.fireStore.collection('categories').doc(docId).set(categoryToPersist);
   }
 
   deleteCategory(id:string): Promise<void>{
-    //return this.http.delete(Constants.API_ENDPOINT+'category/'+id, Constants.HTTP_OPTIONS);
     return this.fireStore.collection('categories').doc(id).delete();
   }
 
