@@ -18,7 +18,7 @@ export class AddworkoutComponent implements OnInit {
 
   public categories:Category[] = [];
 
-  public workout:Workout = new Workout(null,'','',0,new Category(null,''));
+  public workout:Workout = new Workout('','',0,new Category(null,''));
 
   private workouts:Workout[] = [];
 
@@ -30,9 +30,7 @@ export class AddworkoutComponent implements OnInit {
 
   private categoryAdded:boolean = false;
 
-  constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) { 
-  
-  }   
+  constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) { }   
 
   ngOnInit() {
     this.getCategories();
