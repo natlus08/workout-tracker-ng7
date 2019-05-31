@@ -38,12 +38,12 @@ export class ViewworkoutsComponent implements OnInit {
 
     this._workoutService.getActiveWorkout().subscribe((data) => {
       if(data.length){
-        let activeWorkouts: ActiveWorkout = data;
+        let activeWorkouts: ActiveWorkout[] = data;
         this.workoutInProgress = true;
         activeWorkouts.forEach(activeWorkout => {
-          this.activeWorkoutId = data.workout.id;
+          this.activeWorkoutId = activeWorkout.workout.id;
           return;
-        });
+        });        
       }
     }),
     (err: HttpErrorResponse) => {        

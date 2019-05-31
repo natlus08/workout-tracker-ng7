@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
@@ -12,7 +11,7 @@ import { Constants } from '../constants/constants';
 @Injectable()
 export class WorkoutService {
 
-  constructor(private http:HttpClient, private fireStore: AngularFirestore) { }
+  constructor(private fireStore: AngularFirestore) { }
 
   getActiveWorkout():Observable<ActiveWorkout[]>{
     let activeWorkoutsCollection: AngularFirestoreCollection<ActiveWorkout> = this.fireStore.collection('active-workouts', ref => ref.where('status', '==', true));
@@ -39,11 +38,11 @@ export class WorkoutService {
   startWorkout(activeWorkout: ActiveWorkout): Promise<DocumentReference>{ 
     const { id, ...activeWorkoutToPersist } = activeWorkout; // strip id from the active workout model     
     return this.fireStore.collection('active-workouts').add({...activeWorkoutToPersist}); // ... is a spread operator
-  } 
+  }   
 
-  endWorkout(activeWorkout:ActiveWorkout):Observable<ActiveWorkout>{
-    let body = JSON.stringify(activeWorkout);
-    return this.http.post<ActiveWorkout>(Constants.API_ENDPOINT+'active-workout/end', activeWorkout, Constants.HTTP_OPTIONS);
+  endWorkout(activeWorkout: ActiveWorkout): Promise<DocumentReference>{ 
+    const { id, ...activeWorkoutToPersist } = activeWorkout; // strip id from the active workout model     
+    return this.fireStore.collection('active-workouts').add({...activeWorkoutToPersist}); // ... is a spread operator
   }
 
   getWorkout(id: string): Observable<any> {    

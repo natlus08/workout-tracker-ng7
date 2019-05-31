@@ -7,25 +7,25 @@
 </div>
 
 <div *ngFor="let workout of workouts | workoutfilter : searchText; index as i" 
-[ngClass]="workout.started ? 'view-started-record' : 'view-record'">
+[ngClass]="(activeWorkoutId === workout.id) && workoutInProgress ? 'view-started-record' : 'view-record'">
   <div class="row">
     <div class="col-lg-6">
       <div class="input-group mb-3">        
         {{workout.title | uppercase}}
       </div>
     </div>
-    <div class="col-lg-6">      
+    <div class="col-lg-6">   {{activeWorkoutId}} - {{workout.id}}   
         <a [routerLink] = "['/edit',workout.id]">
           <i class="fa fa-edit fa-2x mx-3"></i>
         </a>    
-        <a (click)="(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress ? null : removeWorkout(workout.id)">
-          <i class="fa fa-trash fa-2x mx-3" [ngClass]="{'inactive-icon': (activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress}"></i>
+        <a (click)="((activeWorkoutId === workout.id) && workoutInProgress) ? null : removeWorkout(workout.id)">
+          <i class="fa fa-trash fa-2x mx-3" [ngClass]="{'inactive-icon': (activeWorkoutId === workout.id) && workoutInProgress}"></i>
         </a>            
-        <a (click)="(!(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress) || (workoutInProgress) ? null : start(workout.id)">
-          <i class="fa fa-play fa-2x mx-3" [ngClass]="{'inactive-icon': (!(activeWorkoutId > 0 && activeWorkoutId === workout.id) && workoutInProgress) || (workoutInProgress)}"></i>
+        <a (click)="((activeWorkoutId !== workout.id) && workoutInProgress) || (workoutInProgress) ? null : start(workout.id)">
+          <i class="fa fa-play fa-2x mx-3" [ngClass]="{'inactive-icon': ((activeWorkoutId !== workout.id) && workoutInProgress) || (workoutInProgress)}"></i>
         </a>
-        <a (click)="!(activeWorkoutId > 0 && activeWorkoutId === workout.id) ? null : end(workout.id)">
-          <i class="fa fa-stop fa-2x mx-3" [ngClass]="{'inactive-icon': !(activeWorkoutId > 0 && activeWorkoutId === workout.id)}"></i>
+        <a (click)="(activeWorkoutId !== workout.id) ? null : end(workout.id)">
+          <i class="fa fa-stop fa-2x mx-3" [ngClass]="{'inactive-icon': (activeWorkoutId !== workout.id)}"></i>
         </a>
     </div>    
   </div>  

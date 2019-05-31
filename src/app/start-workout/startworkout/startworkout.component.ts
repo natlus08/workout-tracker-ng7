@@ -50,6 +50,7 @@ export class StartworkoutComponent implements OnInit {
   prepWorkout() : void{
     this._workoutService.getWorkout(this.selectedId).subscribe((data) => {      
         this.activeWorkout.workout = data as Workout;
+        this.activeWorkout.workout.id = this.selectedId;
         this.activeWorkout.startDate = this.today; 
         this.activeWorkout.startTime = this.today;               
       }

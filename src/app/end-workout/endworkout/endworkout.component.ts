@@ -15,7 +15,7 @@ import { Category } from '../../model/category';
 })
 export class EndworkoutComponent implements OnInit {
 
-  private selectedId: number;
+  private selectedId: string;
 
   private activeWorkout: ActiveWorkout = null;
 
@@ -36,21 +36,25 @@ export class EndworkoutComponent implements OnInit {
   private erroneous: boolean = false;
 
   constructor(private _workoutService: WorkoutService, private route: ActivatedRoute, private router: Router) {
-    this.activeWorkout = new ActiveWorkout(null,new Workout(null,'','',0,new Category(null,'')),'',null,null,null,null,false);
+    this.activeWorkout = new ActiveWorkout(new Workout('','',0,new Category(null,'')),'',null,null,null,null,false);
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.selectedId =  +params['index'];
+      this.selectedId =  params['index'];
     });
     this.getActiveWorkout();
   }
 
   getActiveWorkout() : void{
-    this._workoutService.getActiveWorkout().subscribe((data) => {
-        this.activeWorkout = data;
-        this.activeWorkout.endDate = this.today;
-        this.activeWorkout.endTime = this.today;
+    this._workoutService.getActiveWorkout().subscribe((data) => {       
+        let activeWorkouts: ActiveWorkout[] = data;       
+        activeWorkouts.forEach(item => {
+          this.activeWorkout = item;
+          this.activeWorkout.endDate = this.today;
+          this.activeWorkout.endTime = this.today;
+          return;
+        });              
       }
     ),
     (err: HttpErrorResponse) => {        
@@ -67,12 +71,12 @@ export class EndworkoutComponent implements OnInit {
       this.startDateFormat();
       this.startTimeFormat();
       this.activeWorkout.status = false;
-      this._workoutService.endWorkout(this.activeWorkout).subscribe(() => {
+      /*this._workoutService.endWorkout(this.activeWorkout).then(() => {
         this.router.navigate(['/view']);
       }),
       (err: HttpErrorResponse) => {        
         console.log('Failed to end the workout');
-      };
+      };*/
     }
   }
 
