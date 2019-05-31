@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +21,6 @@ const routes: Routes = [
     FormsModule
   ],
   declarations: [ StartworkoutComponent ],
-  providers: [ WorkoutService ]
+  providers: [ WorkoutService, DatePipe ]
 })
 export class StartWorkoutModule { }

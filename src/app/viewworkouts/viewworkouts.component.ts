@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { WorkoutService } from './../services/workout.service'
 
@@ -16,9 +17,9 @@ export class ViewworkoutsComponent implements OnInit {
 
   private workoutInProgress:boolean = false;
 
-  private activeWorkoutId : number = 0;
+  private activeWorkoutId : string = 0;
 
-  constructor(private _workoutService: WorkoutService) { }
+  constructor(private _workoutService: WorkoutService, private router: Router) { }
 
   ngOnInit() {
     setTimeout(()=>{
@@ -45,16 +46,15 @@ export class ViewworkoutsComponent implements OnInit {
     };
   }
 
-  removeWorkout(id:number): void {
-    this._workoutService.deleteWorkout(id).subscribe(() => {
-      this.workouts.splice(this.getIndex(id), 1);
-    }),
-    (err: HttpErrorResponse) => {        
+  removeWorkout(id: string): void {
+    this._workoutService.deleteWorkout(id).then(() => {
+      
+    }).catch((err: HttpErrorResponse) => {        
       console.log('Failed to get the delete the workout');
-    };
-  }
+    });
+  }  
 
-  getIndex(id: number) : number {
+  getIndex(id: string) : number {
     let pos:number = -1;
     this.workouts.forEach(function(workout, index){
       if(workout.id === id){
@@ -63,5 +63,13 @@ export class ViewworkoutsComponent implements OnInit {
     });
     return pos;
   }
+
+  start(id: number) {    
+    this.router.navigate(['/start/' + id]);
+  }  
+
+  end(id: number) {
+    this.router.navigate(['/end/' + id]);
+  } 
 
 }

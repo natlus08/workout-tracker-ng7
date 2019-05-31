@@ -18,7 +18,7 @@ export class StartworkoutComponent implements OnInit {
 
   private activeWorkout:ActiveWorkout = null;
 
-  private selectedId: number;
+  private selectedId: string;
 
   private hours:number = 0;
 
@@ -37,21 +37,21 @@ export class StartworkoutComponent implements OnInit {
   private erroneous: boolean = false;
 
   constructor(private _workoutService: WorkoutService, private route: ActivatedRoute, private router: Router, private datePipe: DatePipe) {
-    this.activeWorkout =  new ActiveWorkout(null,new Workout(null,'','',0,new Category(null,'')),'',null,null,null,null,false);
+    this.activeWorkout =  new ActiveWorkout(new Workout('','',0,new Category(null,'')),'',null,null,null,null,false);
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.selectedId =  +params['index'];
+      this.selectedId =  params['index'];
     });
     this.prepWorkout();
   }
 
   prepWorkout() : void{
-    this._workoutService.getWorkout(this.selectedId).subscribe((data) => {
-        this.activeWorkout.workout = data;
-        this.activeWorkout.startDate = this.today;
-        this.activeWorkout.startTime = this.today;
+    this._workoutService.getWorkout(this.selectedId).subscribe((data) => {      
+        this.activeWorkout.workout = data as Workout;
+        this.activeWorkout.startDate = this.today; 
+        this.activeWorkout.startTime = this.today;               
       }
     ),
     (err: HttpErrorResponse) => {        
@@ -63,14 +63,13 @@ export class StartworkoutComponent implements OnInit {
     let startDateTime = this.combineStartDateTime(this.activeWorkout);
     if(startDateTime > new Date()){
       this.erroneous = true;
-    }else{
+    } else {
       this.activeWorkout.status = true;
-      this._workoutService.startWorkout(this.activeWorkout).subscribe(() => {
+      this._workoutService.startWorkout(this.activeWorkout).then(res => {
         this.router.navigate(['/view']);
-      }),
-      (err: HttpErrorResponse) => {        
+      }).catch(err => {        
         console.log('Failed to start the workout');
-      };
+      });
     }
   }
 

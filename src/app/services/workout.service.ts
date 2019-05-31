@@ -6,7 +6,6 @@ import { map } from 'rxjs/operators';
 
 import { ActiveWorkout } from '../model/activeworkout';
 import { Workout } from '../model/workout';
-import { Category } from '../model/category';
 
 import { Constants } from '../constants/constants';
 
@@ -21,12 +20,12 @@ export class WorkoutService {
 
   getActiveWorkouts():Observable<ActiveWorkout[]>{
     return this.http.get<ActiveWorkout[]>(Constants.API_ENDPOINT+'active-workouts', Constants.HTTP_OPTIONS);
-  }
+  }  
 
-  startWorkout(activeWorkout:ActiveWorkout):Observable<ActiveWorkout>{
-    let body = JSON.stringify(activeWorkout);
-    return this.http.post<ActiveWorkout>(Constants.API_ENDPOINT+'active-workout/start', activeWorkout, Constants.HTTP_OPTIONS);
-  }
+  startWorkout(activeWorkout: ActiveWorkout): Promise<DocumentReference>{ 
+    const { id, ...activeWorkoutToPersist } = activeWorkout; // strip id from the active workout model     
+    return this.fireStore.collection('active-workouts').add({...activeWorkoutToPersist}); // ... is a spread operator
+  } 
 
   endWorkout(activeWorkout:ActiveWorkout):Observable<ActiveWorkout>{
     let body = JSON.stringify(activeWorkout);
@@ -57,10 +56,10 @@ export class WorkoutService {
     const docId = workout.id;
     const { id, ...workoutToPersist } = workout; // strip id from the workout model  
     return this.fireStore.collection('workouts').doc(docId).set(workoutToPersist);
-  }
+  }  
 
-  deleteWorkout(id: number):Observable<any>{
-    return this.http.delete(Constants.API_ENDPOINT+'workout/' + id, Constants.HTTP_OPTIONS);
+  deleteWorkout(id: string): Promise<void>{
+    return this.fireStore.collection('workouts').doc(id).delete();
   }
 
 }
