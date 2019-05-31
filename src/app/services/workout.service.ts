@@ -14,12 +14,26 @@ export class WorkoutService {
 
   constructor(private http:HttpClient, private fireStore: AngularFirestore) { }
 
-  getActiveWorkout():Observable<ActiveWorkout>{
-    return this.http.get<ActiveWorkout>(Constants.API_ENDPOINT+'active-workout', Constants.HTTP_OPTIONS);
+  getActiveWorkout():Observable<ActiveWorkout[]>{
+    let activeWorkoutsCollection: AngularFirestoreCollection<ActiveWorkout> = this.fireStore.collection('active-workouts', ref => ref.where('status', '==', true));
+    return activeWorkoutsCollection.snapshotChanges().pipe(
+      map(actions => actions.map(item => {
+        let data = item.payload.doc.data() as ActiveWorkout;
+        data.id = item.payload.doc.id;        
+        return data;      
+      }))
+    );
   }
 
-  getActiveWorkouts():Observable<ActiveWorkout[]>{
-    return this.http.get<ActiveWorkout[]>(Constants.API_ENDPOINT+'active-workouts', Constants.HTTP_OPTIONS);
+  getActiveWorkouts(): Observable<ActiveWorkout[]>{
+    let activeWorkoutsCollection: AngularFirestoreCollection<ActiveWorkout> = this.fireStore.collection('active-workouts', ref => ref.where('status', '==', false));
+    return activeWorkoutsCollection.snapshotChanges().pipe(
+      map(actions => actions.map(item => {
+        let data = item.payload.doc.data() as ActiveWorkout;
+        data.id = item.payload.doc.id;        
+        return data;      
+      }))
+    );
   }  
 
   startWorkout(activeWorkout: ActiveWorkout): Promise<DocumentReference>{ 

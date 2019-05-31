@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { WorkoutService } from './../services/workout.service'
 
 import { Workout } from '../model/workout';
+import { ActiveWorkout } from '../model/activeworkout';
 
 @Component({
   selector: 'app-viewworkouts',
@@ -17,7 +18,7 @@ export class ViewworkoutsComponent implements OnInit {
 
   private workoutInProgress:boolean = false;
 
-  private activeWorkoutId : string = 0;
+  private activeWorkoutId: string;
 
   constructor(private _workoutService: WorkoutService, private router: Router) { }
 
@@ -36,9 +37,13 @@ export class ViewworkoutsComponent implements OnInit {
     };
 
     this._workoutService.getActiveWorkout().subscribe((data) => {
-      if(null != data){
+      if(data.length){
+        let activeWorkouts: ActiveWorkout = data;
         this.workoutInProgress = true;
-        this.activeWorkoutId = data.workout.id;
+        activeWorkouts.forEach(activeWorkout => {
+          this.activeWorkoutId = data.workout.id;
+          return;
+        });
       }
     }),
     (err: HttpErrorResponse) => {        
