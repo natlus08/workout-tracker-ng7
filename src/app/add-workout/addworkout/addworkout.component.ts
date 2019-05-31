@@ -18,7 +18,7 @@ export class AddworkoutComponent implements OnInit {
 
   public categories:Category[] = [];
 
-  public workout:Workout = null;
+  public workout:Workout = new Workout(null,'','',0,new Category(null,''));
 
   private workouts:Workout[] = [];
 
@@ -30,9 +30,9 @@ export class AddworkoutComponent implements OnInit {
 
   private categoryAdded:boolean = false;
 
-  constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) {
-    this.workout = new Workout(null,'','',0,new Category(null,''));
-  }
+  constructor(private _categoryService: CategoryService, private _workoutService: WorkoutService, private modalService: NgbModal, private router: Router) { 
+  
+  }   
 
   ngOnInit() {
     this.getCategories();
@@ -50,7 +50,7 @@ export class AddworkoutComponent implements OnInit {
     ),
     (err: HttpErrorResponse) => {        
       console.log('Failed to get the categories');
-    };
+    };    
   }
 
   getWorkouts() : void{
@@ -72,14 +72,13 @@ export class AddworkoutComponent implements OnInit {
         this.workoutFound = true;
         return;
       }
-    });
+    });    
     if(!this.workoutFound){
-      this._workoutService.addWorkout(this.workout).subscribe(() => {
+      this._workoutService.addWorkout(this.workout).then(() => {
         this.router.navigate(['/view']);
-      }),
-    (err: HttpErrorResponse) => {        
-      console.log('Failed to create the workout');
-    };
+      }).catch(err => {
+        console.log('Failed to create the workout');
+      });
     }
   }
 
@@ -107,12 +106,13 @@ export class AddworkoutComponent implements OnInit {
       }
     });
     if(!this.categoryFound){
-      let newCategoryObj: Category = new Category(null,this.newCategory);
-      this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
+      let newCategoryObj: Category = new Category(this.newCategory);                 
+      this._categoryService.addCategory(newCategoryObj).then(res => {
+        newCategoryObj.id = res.id;        
         this.newCategory = '';
-        this.categories.push(data);
-        this.categoryAdded = true;
+      }).catch(err => {        
+        console.log('Failed to add the category');
       });
     }
-  }
+  }   
 }
