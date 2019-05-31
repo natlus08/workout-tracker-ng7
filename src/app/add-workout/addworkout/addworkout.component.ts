@@ -108,6 +108,7 @@ export class AddworkoutComponent implements OnInit {
       this._categoryService.addCategory(newCategoryObj).then(res => {
         newCategoryObj.id = res.id;        
         this.newCategory = '';
+        this.categoryAdded = true;
       }).catch(err => {        
         console.log('Failed to add the category');
       });

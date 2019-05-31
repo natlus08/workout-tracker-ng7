@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 
 import { ActiveWorkout } from '../model/activeworkout';
 import { Workout } from '../model/workout';
+import { Category } from '../model/category';
 
 import { Constants } from '../constants/constants';
 
@@ -32,8 +33,8 @@ export class WorkoutService {
     return this.http.post<ActiveWorkout>(Constants.API_ENDPOINT+'active-workout/end', activeWorkout, Constants.HTTP_OPTIONS);
   }
 
-  getWorkout(id:number):Observable<Workout>{
-    return this.http.get<Workout>(Constants.API_ENDPOINT+'workout/'+id, Constants.HTTP_OPTIONS);
+  getWorkout(id: string): Observable<any> {    
+    return this.fireStore.collection('workouts').doc(id).valueChanges();    
   }  
 
   getWorkouts():Observable<Workout[]>{
@@ -50,10 +51,12 @@ export class WorkoutService {
   addWorkout(workout: Workout): Promise<DocumentReference>{ 
     const { id, ...workoutToPersist } = workout; // strip id from the workout model     
     return this.fireStore.collection('workouts').add({...workoutToPersist}); // ... is a spread operator
-  }
+  }  
 
-  editWorkout(workout: Workout):Observable<Workout>{
-    return this.http.put<Workout>(Constants.API_ENDPOINT+'workout',workout, Constants.HTTP_OPTIONS);
+  editWorkout(workout: Workout): Promise<void>{
+    const docId = workout.id;
+    const { id, ...workoutToPersist } = workout; // strip id from the workout model  
+    return this.fireStore.collection('workouts').doc(docId).set(workoutToPersist);
   }
 
   deleteWorkout(id: number):Observable<any>{

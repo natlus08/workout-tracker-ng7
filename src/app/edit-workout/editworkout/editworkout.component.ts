@@ -16,13 +16,13 @@ import { Category } from '../../model/category';
 })
 export class EditworkoutComponent implements OnInit {
 
-  private workout:Workout = null;
+  private workout:Workout = new Workout('','',0,new Category(null,''));
 
   private workouts:Workout[] = [];
 
   private categories:Category[] = [];
 
-  private selectedId: number;
+  private selectedId: string;
 
   private workoutFound:boolean = false;
 
@@ -32,13 +32,11 @@ export class EditworkoutComponent implements OnInit {
 
   private categoryAdded:boolean = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private _workoutService: WorkoutService, private _categoryService: CategoryService, private modalService: NgbModal) {
-    this.workout = new Workout(null,'','',0,new Category(null,''));
-  }
+  constructor(private route: ActivatedRoute, private router: Router, private _workoutService: WorkoutService, private _categoryService: CategoryService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.selectedId =  +params['index'];
+      this.selectedId =  params['index'];
     });
     this.getCategories();
     this.getWorkouts();
@@ -56,9 +54,10 @@ export class EditworkoutComponent implements OnInit {
   }
 
   getWorkout() : void{
-    this._workoutService.getWorkout(this.selectedId).subscribe((data) => {
-        this.workout = data;
-        this.workout.category = this.categories[this.getIndex(this.workout.category.id)];
+    this._workoutService.getWorkout(this.selectedId).subscribe((data) => {      
+        this.workout = data as Workout;
+        this.workout.id = this.selectedId; 
+        this.workout.category = this.categories[this.getIndex(this.workout.category.id)];                
       }
     ),
     (err: HttpErrorResponse) => {        
@@ -69,6 +68,9 @@ export class EditworkoutComponent implements OnInit {
   getCategories() : void{
     this._categoryService.getCategories().subscribe((data) => {
         this.categories = data;
+        if (this.workout.id){
+          this.workout.category = this.categories[this.getIndex(this.workout.category.id)]; 
+        }        
       }
     ),
     (err: HttpErrorResponse) => {        
@@ -83,13 +85,12 @@ export class EditworkoutComponent implements OnInit {
         return;
       }
     });
-    if(!this.workoutFound){
-      this._workoutService.editWorkout(this.workout).subscribe(() => {
+    if(!this.workoutFound){      
+      this._workoutService.editWorkout(this.workout).then(() => {
         this.router.navigate(['/view']);
-      }),
-      (err: HttpErrorResponse) => {        
-        console.log('Failed to update the workout');
-      };
+      }).catch((err: HttpErrorResponse) => {        
+          console.log('Failed to update the workout');
+      });
     }
   }
 
@@ -108,20 +109,19 @@ export class EditworkoutComponent implements OnInit {
         return;
       }
     });
-    if(!this.categoryFound){
-      let newCategoryObj: Category = new Category(null,this.newCategory);
-      this._categoryService.addCategory(newCategoryObj).subscribe((data) => {
+    if(!this.categoryFound){      
+      let newCategoryObj: Category = new Category(this.newCategory);                 
+      this._categoryService.addCategory(newCategoryObj).then(res => {
+        newCategoryObj.id = res.id;  
+        this.categoryAdded = true;      
         this.newCategory = '';
-        this.categoryAdded = true;
-        this.categories.push(data);
-      }),
-      (err: HttpErrorResponse) => {        
+      }).catch(err => {        
         console.log('Failed to add the category');
-      };
+      });
     }
   }
 
-  getIndex(id: number) : number {
+  getIndex(id: string) : number {
     let pos:number = -1;
     this.categories.forEach(function(category, index){
       if(category.id === id){
