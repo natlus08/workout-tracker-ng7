@@ -72,7 +72,7 @@ export class TrackComponent implements OnInit {
   }
 
   getArchives(): void{
-    this._workoutService.getActiveWorkouts().subscribe((data) => {
+    this._workoutService.getActiveWorkouts().subscribe((data) => {      
         if(data != null){
           this.activeWorkouts = data;
           this.calculateWOMinutes();
@@ -80,7 +80,7 @@ export class TrackComponent implements OnInit {
         }else{
           this.dataAvailable = false;
         }
-      }
+      }      
     ),
     (err: HttpErrorResponse) => {        
       console.log('Failed to get the active workouts');
@@ -205,17 +205,20 @@ export class TrackComponent implements OnInit {
     this.weekChart.addSeries({
       name: 'workouts',
       data: this.weekChartData,
-      color: 'orange'
+      color: 'orange',
+      type: 'bar'
     }, true, true);
     this.monthChart.addSeries({
       name: 'workouts',
       data: this.monthChartData,
-      color: 'purple'
+      color: 'purple',
+      type: 'bar'
     }, true, true);
     this.yearChart.addSeries({
       name: 'workouts',
       data: this.yearChartData,
-      color: 'green'
+      color: 'green',
+      type: 'bar'
     }, true, true);
   }
 
@@ -226,13 +229,13 @@ export class TrackComponent implements OnInit {
   }
 
   combineStartDateTime(activeWorkout: ActiveWorkout) : Date {
-    return new Date(+activeWorkout.startDate.toString().substring(0, 4), +activeWorkout.startDate.toString().substring(5, 7) - 1, +activeWorkout.startDate.toString().substring(8, 10),
-      +activeWorkout.startTime.toString().substring(0, 2), +activeWorkout.startTime.toString().substring(3, 5), +activeWorkout.startTime.toString().substring(6, 8));
+    return new Date(activeWorkout.startDate.toDate().getFullYear(), activeWorkout.startDate.toDate().getMonth(), activeWorkout.startDate.toDate().getDate(),
+      activeWorkout.startTime.toDate().getHours(), activeWorkout.startTime.toDate().getMinutes(), activeWorkout.startTime.toDate().getSeconds());
   }
 
   combineEndDateTime(activeWorkout: ActiveWorkout) : Date {
-    return new Date(+activeWorkout.endDate.toString().substring(0, 4), +activeWorkout.endDate.toString().substring(5, 7) - 1, +activeWorkout.endDate.toString().substring(8, 10),
-      +activeWorkout.endTime.toString().substring(0, 2), +activeWorkout.endTime.toString().substring(3, 5), +activeWorkout.endTime.toString().substring(6, 8));
+    return new Date(activeWorkout.endDate.toDate().getFullYear(), activeWorkout.endDate.toDate().getMonth(), activeWorkout.endDate.toDate().getDate(),
+      activeWorkout.endTime.toDate().getHours(), activeWorkout.endTime.toDate().getMinutes(), activeWorkout.endTime.toDate().getSeconds());
   }
 
   private weekChart = new Chart({

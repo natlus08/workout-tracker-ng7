@@ -4,13 +4,13 @@ export class ActiveWorkout {
   public id: string;
   public workout: Workout;
   public comment: string;
-  public startDate: Date;
-  public endDate: Date;
-  public startTime: Date;
-  public endTime: Date;
+  public startDate: any;
+  public endDate: any;
+  public startTime: any;
+  public endTime: any;
   public status: boolean;
 
-  constructor(workout: Workout, comment: string, startDate: Date, endDate: Date, startTime: Date, endTime: Date, status: boolean, id?: string) { 
+  constructor(workout: Workout, comment: string, startDate: any, endDate: any, startTime: any, endTime: any, status: boolean, id?: string) { 
     this.comment = comment;
     this.endDate = endDate;
     this.endTime = endTime;

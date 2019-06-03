@@ -54,7 +54,7 @@ export class EndworkoutComponent implements OnInit {
           this.activeWorkout.endDate = this.today;
           this.activeWorkout.endTime = this.today;
           return;
-        });              
+        });                 
       }
     ),
     (err: HttpErrorResponse) => {        
@@ -70,28 +70,24 @@ export class EndworkoutComponent implements OnInit {
     }else{
       this.startDateFormat();
       this.startTimeFormat();
-      this.activeWorkout.status = false;
-      /*this._workoutService.endWorkout(this.activeWorkout).then(() => {
+      this.activeWorkout.status = false;      
+      this._workoutService.endWorkout(this.activeWorkout).then(() => {
         this.router.navigate(['/view']);
       }),
       (err: HttpErrorResponse) => {        
         console.log('Failed to end the workout');
-      };*/
+      };
     }
   }
 
-  startTimeFormat():void {
-    let hoursFormat = +this.activeWorkout.startTime.toString().substring(0, 2);
-    let minutesFormat = +this.activeWorkout.startTime.toString().substring(3, 5);
-    let secondsFormat = +this.activeWorkout.startTime.toString().substring(6, 8);
-    this.activeWorkout.startTime = new Date(1970, 0, 1, hoursFormat, minutesFormat, secondsFormat);
+  startTimeFormat():void {    
+    this.activeWorkout.startTime = new Date(1970, 0, 1, this.activeWorkout.startTime.toDate().getHours(), this.activeWorkout.startTime.toDate().getMinutes(), 
+      this.activeWorkout.startTime.toDate().getSeconds());
   }
 
-  startDateFormat():void {
-    let yearFormat = +this.activeWorkout.startDate.toString().substring(0, 4);
-    let monthFormat = +this.activeWorkout.startDate.toString().substring(5, 7);
-    let dateFormat = +this.activeWorkout.startDate.toString().substring(8, 10);
-    this.activeWorkout.startDate = new Date(yearFormat,monthFormat-1,dateFormat, 0, 0, 0);
+  startDateFormat():void {    
+    this.activeWorkout.startDate = new Date(this.activeWorkout.startDate.toDate().getFullYear(),this.activeWorkout.startDate.toDate().getMonth(),
+      this.activeWorkout.startDate.toDate().getDate(), 0, 0, 0);
   }
 
   timereintialize($event):void {
@@ -113,8 +109,8 @@ export class EndworkoutComponent implements OnInit {
       activeWorkout.endTime.getHours(), +activeWorkout.endTime.getMinutes(), +activeWorkout.endTime.getSeconds());
   }
 
-  combineStartDateTime(activeWorkout: ActiveWorkout) : Date {
-    return new Date(+activeWorkout.startDate.toString().substring(0, 4), +activeWorkout.startDate.toString().substring(5, 7) - 1, +activeWorkout.startDate.toString().substring(8, 10),
-      +activeWorkout.startTime.toString().substring(0, 2), +activeWorkout.startTime.toString().substring(3, 5), +activeWorkout.startTime.toString().substring(6, 8));
+  combineStartDateTime(activeWorkout: ActiveWorkout) : Date {   
+    return new Date(activeWorkout.startDate.toDate().getFullYear(), activeWorkout.startDate.toDate().getMonth(), activeWorkout.startDate.toDate().getDate(),
+      activeWorkout.startTime.toDate().getHours(), activeWorkout.startTime.toDate().getMinutes(), activeWorkout.startTime.toDate().getSeconds());
   }
 }

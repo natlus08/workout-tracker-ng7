@@ -40,9 +40,10 @@ export class WorkoutService {
     return this.fireStore.collection('active-workouts').add({...activeWorkoutToPersist}); // ... is a spread operator
   }   
 
-  endWorkout(activeWorkout: ActiveWorkout): Promise<DocumentReference>{ 
-    const { id, ...activeWorkoutToPersist } = activeWorkout; // strip id from the active workout model     
-    return this.fireStore.collection('active-workouts').add({...activeWorkoutToPersist}); // ... is a spread operator
+  endWorkout(activeWorkout: ActiveWorkout): Promise<void>{     
+    const docId = activeWorkout.id;
+    const { id, ...activeWorkoutToPersist } = activeWorkout; // strip id from the active workout model  
+    return this.fireStore.collection('active-workouts').doc(docId).set(activeWorkoutToPersist);
   }
 
   getWorkout(id: string): Observable<any> {    
